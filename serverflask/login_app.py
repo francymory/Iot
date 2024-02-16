@@ -100,7 +100,7 @@ def signup():
 
 
 # Verifico se un braccialetto è isolato, gestisco le GET del bridge
-@app.route('/<string:braccialetto_id>', methods=['GET'])
+@app.route('/others/<string:braccialetto_id>', methods=['GET'])
 
 def check_isolato(braccialetto_id):
 
@@ -146,4 +146,4 @@ def calcola_distanza(lat1, lon1, lat2, lon2):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        app.run(host='192.168.1.87')
+        app.run(host='192.168.1.52')
