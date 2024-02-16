@@ -12,22 +12,22 @@ class Braccialetto(db.Model):
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
     caduta = db.Column(db.Boolean, nullable=False)
-    ip = db.Column(db.String(200), nullable=False)
+
 
     def __repr__(self):
-        return f"Braccialetto: {self.identifier}, {self.latitude}, {self.longitude}, {self.caduta}, {self.ip}"
+        return f"Braccialetto: {self.identifier}, {self.latitude}, {self.longitude}, {self.caduta}"
 
 # Metto i dati da parte di un braccialetto, spediti con una POST nel bridge, nel DB 
-@app.route('/', methods=['POST'])
+@app.route('/data', methods=['POST'])
 def ricevi_richiesta():
     dati_richiesta = request.get_json()
     identifier = dati_richiesta.get('id', '')
     latitude = float(dati_richiesta.get('latitude', '0.0'))
     longitude = float(dati_richiesta.get('longitude', '0.0'))
     caduta = bool(dati_richiesta.get("caduta", False))
-    ip = request.remote_addr
+    
 
-    print(f'stampa prova: ho ricevuto da identifier={identifier}, latitude={latitude}, longitude={longitude}, caduta={caduta}, ip={ip}')
+    print(f'stampa prova: ho ricevuto da identifier={identifier}, latitude={latitude}, longitude={longitude}, caduta={caduta}')
 
     # Cerco il braccialetto nel database
     braccialetto_esistente = Braccialetto.query.filter_by(identifier=identifier).first()
@@ -37,17 +37,16 @@ def ricevi_richiesta():
         braccialetto_esistente.latitude = latitude
         braccialetto_esistente.longitude = longitude
         braccialetto_esistente.caduta = caduta
-        braccialetto_esistente.ip = ip
         db.session.commit()
     else:
         # Altrimenti aggiung il braccialetto e i suoi dati nel database
-        braccialetto = Braccialetto(identifier=identifier, latitude=latitude, longitude=longitude, caduta=caduta, ip=ip)
+        braccialetto = Braccialetto(identifier=identifier, latitude=latitude, longitude=longitude, caduta=caduta)
         db.session.add(braccialetto)
         db.session.commit()
     return "Info aggiunte al DB, 200"
 
 # Verifico se un braccialetto è isolato, gestisco le GET del bridge
-@app.route('/<string:braccialetto_id>', methods=['GET'])
+@app.route('/others/<string:braccialetto_id>', methods=['GET'])
 def check_isolato(braccialetto_id):
     
 
@@ -109,4 +108,4 @@ def calcola_distanza(lat1, lon1, lat2, lon2):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        app.run(host='192.168.1.185')
+        app.run(host='192.168.1.52')
