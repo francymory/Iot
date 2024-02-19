@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, Response
 import json
 from flask_sqlalchemy import SQLAlchemy
 import string, random
+from math import radians, sin, cos, sqrt, atan2 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///braccialetti.db'
@@ -140,8 +141,21 @@ def check_isolato(braccialetto_id):
 
 # Funzione per calcolare la distanza in metri tra due coordinate GPS
 def calcola_distanza(lat1, lon1, lat2, lon2):
-    # fanculo la distanza geodesica!!! beccati questa distanza euclidea 0 neuroni usati
-    return ((lat1-lat2)**2+(lon1-lon2)**2)**(0.5)
+    # Raggio della Terra in metri
+    R = 6371000
+    # Converti le coordinate in radianti
+    lat1_rad = radians(lat1)
+    lon1_rad = radians(lon1)
+    lat2_rad = radians(lat2)
+    lon2_rad = radians(lon2)
+    # Differenze tra le coordinate
+    dlat = lat2_rad - lat1_rad
+    dlon = lon2_rad - lon1_rad
+    # Calcola la distanza utilizzando la formula di Haversine
+    a = sin(dlat/2)**2 + cos(lat1_rad) * cos(lat2_rad) * sin(dlon/2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    distanza = R * c
+    return distanza
 
 if __name__ == '__main__':
     with app.app_context():
