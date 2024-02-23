@@ -32,9 +32,15 @@ def ricevi_richiesta():
     identifier = dati_richiesta.get('id', '')
     latitude = float(dati_richiesta.get('latitude', '0.0'))
     longitude = float(dati_richiesta.get('longitude', '0.0'))
-    caduta = bool(dati_richiesta.get("caduta", False))
+    cad=dati_richiesta.get("caduta", 0)
+    caduta=0
+    if cad:
+        caduta = True
+    else:
+        caduta=False
+    
 
-    print(f'stampa prova: ho ricevuto da identifier={identifier}, latitude={latitude}, longitude={longitude}, caduta={caduta}')
+    # print(f'stampa prova: ho ricevuto da identifier={identifier}, latitude={latitude}, longitude={longitude}, caduta={caduta}')
 
     # Cerco il braccialetto nel database
     braccialetto_esistente = Braccialetto.query.filter_by(identifier=identifier).first()
@@ -50,7 +56,7 @@ def ricevi_richiesta():
         braccialetto = Braccialetto(identifier=identifier, latitude=latitude, longitude=longitude, caduta=caduta)
         db.session.add(braccialetto)
         db.session.commit()
-    return "Info aggiunte al DB, 200"
+    return "Info aggiunte al DB",200
     
 
 # per generare stringhe
@@ -135,7 +141,7 @@ def check_isolato(braccialetto_id):
         "latitude": lat,
         "longitude": long
     }
-    print("invio a ", braccialetto_id, response_data)
+    print("invio ", response_data)
     return jsonify(response_data), 200
 
 
@@ -160,4 +166,4 @@ def calcola_distanza(lat1, lon1, lat2, lon2):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        app.run(host='192.168.1.52')
+        app.run(host='192.168.1.87')
