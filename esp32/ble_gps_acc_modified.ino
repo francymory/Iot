@@ -12,15 +12,11 @@
 #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define GPS_CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 #define ACCEL_CHARACTERISTIC_UUID  "825af059-3530-4698-bd27-3f881eea9a6f"
-
-//#define SERVICE_UUID_RECEIVE    "624148b3-c9c9-4968-8543-4fe150e1ed9a"
 #define STATUS_CHARACTERISTIC_UUID "d29ed658-35c8-4d80-bf33-78e22b1a596e"
 
 BLEServer* pServer = NULL;
 BLECharacteristic *gpsCharacteristic = NULL;
 BLECharacteristic *accelCharacteristic = NULL;
-
-//BLEServer* pServerReceive =NULL;
 BLECharacteristic* statusCharacteristic = NULL;
 
 BLEDescriptor *pDescr;
@@ -50,7 +46,6 @@ void checkToReconnect()
   if (!deviceConnected && oldDeviceConnected) {
     delay(500); // give the bluetooth stack the chance to get things ready
     pServer->startAdvertising(); // restart advertising
-    //pServerReceive->startAdvertising(); // restart advertising
     Serial.println("Disconnected: start advertising");
     oldDeviceConnected = deviceConnected;
   }
@@ -88,9 +83,9 @@ void setup() {
   Serial.begin(115200);
   SerialGPS.begin(9600, SERIAL_8N1, RXD2, TXD2);
 
-  pinMode(4,OUTPUT);  
-  pinMode(2,OUTPUT);  //ROSSO
-  pinMode(13,OUTPUT);  
+  pinMode(4,OUTPUT);  //CICALINO
+  pinMode(2,OUTPUT);  //LED ROSSO
+  pinMode(13,OUTPUT);  //LED CONNESSIONE BLE
   digitalWrite(4,LOW);
   digitalWrite(2,LOW);
   digitalWrite(13,LOW);
@@ -161,12 +156,10 @@ void setup() {
   pServer = BLEDevice::createServer();
   pServer->setCallbacks(new MyServerCallbacks());
 
-  //pServerReceive = BLEDevice::createServer();
-  //pServerReceive->setCallbacks(new MyServerCallbacks());
   
   //Create services
   BLEService *pService = pServer->createService(SERVICE_UUID);
-  //BLEService *pServiceReceive = pServerReceive->createService(SERVICE_UUID_RECEIVE);
+  
 
   // Create GPS characteristic
   gpsCharacteristic = pService->createCharacteristic(
@@ -195,13 +188,10 @@ void setup() {
 
   // Start services
   pService->start();
-  //pServiceReceive->start();
 
   // Start advertising
   BLEAdvertising *pAdvertising = pServer->getAdvertising();
   pAdvertising->start();
-  //BLEAdvertising *pAdvertisingReceive = pServerReceive->getAdvertising();
-  //pAdvertisingReceive->start();
 
 }
 
