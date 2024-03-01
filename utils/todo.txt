@@ -1,0 +1,30 @@
+inserire AI nel braccialetto, difficile su microcontrollore, inserire predittore di caduta che prende la sequenza e capisce se stai per cadere.
+
+predizione di affollamento in momento e spazio -> prophet. serie temporale monovariata, singolo punto, estendo perchè voglio che tenga conto di lat e long, continual learning, continuo miglioramento
+
+predizione, si accende qualcosa se sei in una zona generalmente isolata. 
+richiesta HTTP -> ok / attenzione (non c'è nessuno && non ci sarà nessuno di base)
+oppure due livelli di pericolo
+
+ORA non c'è nessuno	DI SOLITO c'è qualcuno 			giallo
+ORA c'è qualcuno	DI SOLITO  c'è qualcuno 		OK
+ORA non c'è nessuno	DI SOLITO non c'è nessuno 		rosso
+ORA c'è qualcuno	DI SOLITO non c'è nessuno 		OK
+
+vedi video vecchi del prof su prophet
+file csv tempo/val numerico per ogni pto di interesse
+
+NOSTRO CASO: orario/numero persone, in base al timestamp sarà più o meno granulare. da aggiornare una volta al gg o comunque periodicamente. salvo la predizione di oggi per velocizzare la get. 
+
+il focus non è l'AI in sè ma l'implementazione nel caso reale
+
+
+
+
+DOMANDA 2
+unimore: hotspot e ciao
+casa: 	1) router, metti dynamic dns, noip? boh ok username password nome del servizio
+	2) port forwarding, se sei raggiunto sulla porta 80, reindirizza all'IP 192.168...
+
+ESAME DEMO FISICA!!! PORCA TROIA
+facciamo anche il video di prova
